@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>金佳信 · AI视频作品集 — 《候》</title>
+<title>金佳信 · AI视频作品集</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background:#0a0a0f; color:#e8e8ee; font-family:"Noto Sans CJK SC","Microsoft YaHei",sans-serif; line-height:1.7; }
@@ -18,6 +18,7 @@
   .meta { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:44px; }
   .meta div { font-size:13px; color:#b8bcc8; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:8px; padding:6px 12px; }
   h2 { font-size:22px; font-weight:700; margin:44px 0 16px; padding-left:14px; border-left:4px solid #67e8f9; }
+  h2 .en { font-size:13px; color:#6b7080; font-weight:400; letter-spacing:1px; margin-left:10px; }
   p { color:#c8ccd8; font-size:15px; margin-bottom:12px; }
   .grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:20px 0; }
   .grid figure { border-radius:12px; overflow:hidden; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); }
@@ -26,23 +27,73 @@
   .flow { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:20px 0; }
   .flow .step { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:14px; font-size:13.5px; color:#c8ccd8; }
   .flow .step b { display:block; color:#67e8f9; font-size:13px; margin-bottom:6px; letter-spacing:1px; }
+  /* 千川竖屏素材区 */
+  .qc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:20px 0; }
+  .qc-grid figure { border-radius:12px; overflow:hidden; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); }
+  .qc-grid video { width:100%; display:block; background:#000; }
+  .qc-grid figcaption { font-size:12.5px; color:#9aa0b0; padding:8px 12px; }
+  .stats { display:flex; flex-wrap:wrap; gap:12px; margin:18px 0 8px; }
+  .stats .s { flex:1; min-width:150px; background:rgba(103,232,249,.06); border:1px solid rgba(103,232,249,.2); border-radius:12px; padding:16px 18px; }
+  .stats .s b { display:block; font-size:26px; color:#67e8f9; font-weight:800; letter-spacing:1px; }
+  .stats .s span { font-size:13px; color:#9aa0b0; }
+  .note { font-size:13px; color:#6b7080; border-left:3px solid rgba(255,255,255,.15); padding-left:12px; margin:14px 0; }
   .links { display:flex; flex-wrap:wrap; gap:14px; margin-top:32px; }
   .links a { color:#e8e8ee; text-decoration:none; font-size:14px; border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:10px 18px; transition:.2s; }
   .links a:hover { border-color:#67e8f9; color:#67e8f9; }
   footer { margin-top:60px; padding-top:24px; border-top:1px solid rgba(255,255,255,.08); color:#6b7080; font-size:13px; }
-  @media(max-width:700px){ .grid,.flow{grid-template-columns:1fr;} h1{font-size:30px;} }
+  @media(max-width:700px){ .grid,.flow{grid-template-columns:1fr;} .qc-grid{grid-template-columns:1fr 1fr;} h1{font-size:30px;} }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="tag">AI GENERATED CINEMATIC · 2026</div>
-  <h1>《候》</h1>
+  <div class="tag">AI CONTENT PORTFOLIO · 2026</div>
+  <h1>金佳信 · AI视频作品集</h1>
+  <div class="sub">
+    <span>AI内容生产 / AIGC方向</span>
+    <span>杭州 · 2027届</span>
+    <span>豆包Seedream / Seedance · 剪映专业版</span>
+  </div>
+
+  <!-- ============ 千川带货素材（实习实战） ============ -->
+  <h2>千川信息流带货素材<span class="en">实习实战 · 真实投放数据</span></h2>
+  <p>七度信息科技 AI内容运营实习期间，为大健康品类（胃肠贴）制作的抖音千川投流素材。工作流：豆包 Seedream 文生图 / Seedance 图生视频产出画面，剪映专业版完成剪辑、字幕、音效与合规处理；个人日产 <b style="color:#e8e8ee;">15 条精剪</b>，并通过提示词模板体系 + 违禁词库把团队素材过审率从 70% 提升到 80%。</p>
+  <div class="stats">
+    <div class="s"><b>¥5万/天</b><span>最高单条素材日消耗</span></div>
+    <div class="s"><b>¥40万/月</b><span>爆款素材月度消耗</span></div>
+    <div class="s"><b>15条/天</b><span>个人精剪产能</span></div>
+    <div class="s"><b>70%→80%</b><span>提示词体系重构后过审率</span></div>
+  </div>
+  <div class="qc-grid">
+    <figure>
+      <video controls preload="metadata" poster="assets/qianchuan-1.jpg" muted><source src="assets/qianchuan-1.mp4" type="video/mp4"></video>
+      <figcaption>千川素材 01 · 产品特写钩子</figcaption>
+    </figure>
+    <figure>
+      <video controls preload="metadata" poster="assets/qianchuan-2.jpg" muted><source src="assets/qianchuan-2.mp4" type="video/mp4"></video>
+      <figcaption>千川素材 02 · 痛点对比情景</figcaption>
+    </figure>
+    <figure>
+      <video controls preload="metadata" poster="assets/qianchuan-3.jpg" muted><source src="assets/qianchuan-3.mp4" type="video/mp4"></video>
+      <figcaption>千川素材 03 · 医生角色推荐</figcaption>
+    </figure>
+    <figure>
+      <video controls preload="metadata" poster="assets/qianchuan-4.jpg" muted><source src="assets/qianchuan-4.mp4" type="video/mp4"></video>
+      <figcaption>千川素材 04 · 暴饮暴食痛点</figcaption>
+    </figure>
+    <figure>
+      <video controls preload="metadata" poster="assets/qianchuan-5.jpg" muted><source src="assets/qianchuan-5.mp4" type="video/mp4"></video>
+      <figcaption>千川素材 05 · 问诊对话情景</figcaption>
+    </figure>
+  </div>
+  <p class="note">说明：以上为实习期间为品牌方制作的投流素材，仅作个人能力展示；画面中「豆包AI生成」为生成平台标识，品牌版权归原品牌方所有。违规功效画面均以动画蒙版 / 暗示镜头替代处理以通过平台审核。</p>
+
+  <!-- ============ AI短片《候》 ============ -->
+  <h2>AI 短片《候》<span class="en">全流程独立制作 · 48小时交付</span></h2>
   <div class="sub">
     <span>超自然都市 · 仙侠 CG 预告片</span>
     <span>时长 27.7s</span>
     <span>1920×1080 / 30fps</span>
   </div>
-
   <div class="video-box">
     <video controls preload="metadata" poster="assets/creature.jpg">
       <source src="assets/hou-trailer.mp4" type="video/mp4">
@@ -55,10 +106,7 @@
     <div>剪辑/声音：剪映专业版</div>
     <div>角色一致性：三视图母版 + 图生视频</div>
   </div>
-
-  <h2>创意</h2>
-  <p>雨夜，霓虹漫溢的异变都市。一只乌鸦掠过废墟楼宇，云层深处有巨影一闪而逝；它追着地面的红色裂光飞向城市尽头，在灵骸生物粒子重组、睁眼的刹那被气浪撕碎，黑羽坠落。镜头切回街心——银发青衫的剑客早已立在雨中，仿佛已等候多时。青蓝剑光与暗红粒子在雨巷对撞爆散，白光褪去，极近的瞳孔里，恶魔剪影正缓缓消散。</p>
-  <p>以乌鸦的观察者视角完成世界观巡礼，以"等候多时"的静立完成人物塑造：文戏在静立与眼瞳，武戏在粒子重组与剑光对撞。美术取最终幻想式写实 CG，将仙侠服饰与现代都市废墟相融。</p>
+  <p>雨夜，霓虹漫溢的异变都市。一只乌鸦掠过废墟楼宇，云层深处有巨影一闪而逝——它追着地面的红色裂光飞向城市尽头，在灵骸生物粒子重组、睁眼的刹那被气浪撕碎，黑羽坠落。镜头切回街心——银发青衫的剑客早已静立在雨中，仿佛已等候多时。青色剑光与暗红粒子在雨巷对撞爆散，白光褪去，极近的瞳孔里，恶魔残影正缓缓消散。</p>
 
   <h2>关键 AI 素材</h2>
   <div class="grid">
@@ -80,20 +128,39 @@
     <div class="step"><b>04 成片</b>剪映拼接、鼓点卡点、闪白转场、BGM 与音效分层</div>
   </div>
 
-  <h2>剪辑与特效练习</h2>
-  <p>除 AIGC 内容生产外，日常进行蒙版（Mask）动画与后期特效练习，掌握画面揭示、文字生长、歌词跟踪等剪辑技法。</p>
-  <div class="grid" style="grid-template-columns:1fr 1fr;">
+  <!-- ============ 剪辑与特效练习 ============ -->
+  <h2>剪辑与后期练习<span class="en">剪映专业版 · 蒙版 / 转场 / 调色</span></h2>
+  <p>除 AIGC 内容生产外，日常进行蒙版（Mask）动画与后期特效练习，掌握画面揭示、文字生长、歌词跟踪、留色、转场等剪辑技法。</p>
+  <div class="grid">
     <figure>
       <video controls preload="metadata" style="width:100%;display:block;">
         <source src="assets/growth.mp4" type="video/mp4">
       </video>
-      <figcaption><b style="color:#e8e8ee;">《GROWTH · 生长》</b><br>蒙版生长文字动画 · Mask 遮罩揭示 + 自然生长动效 · 1080p</figcaption>
+      <figcaption><b style="color:#e8e8ee;">《GROWTH · 生长》</b><br>蒙版生长文字动画 · Mask 遮罩揭示 + 自然生长音效 · 1080p</figcaption>
     </figure>
     <figure>
       <video controls preload="metadata" style="width:100%;display:block;">
         <source src="assets/echoes.mp4" type="video/mp4">
       </video>
       <figcaption><b style="color:#e8e8ee;">《ECHOES · 回响》</b><br>歌词蒙版动效 · 文字跟踪 + Mask 转场 · 音乐短视频剪辑</figcaption>
+    </figure>
+    <figure>
+      <video controls preload="metadata" style="width:100%;display:block;">
+        <source src="assets/edit-1.mp4" type="video/mp4">
+      </video>
+      <figcaption><b style="color:#e8e8ee;">《旅途 · 转场》</b><br>竖屏旅拍 · 运镜节奏与场景转场练习</figcaption>
+    </figure>
+    <figure>
+      <video controls preload="metadata" style="width:100%;display:block;">
+        <source src="assets/edit-2.mp4" type="video/mp4">
+      </video>
+      <figcaption><b style="color:#e8e8ee;">《人间烟火 · 留色》</b><br>黑白留色技法 · 局部色彩保留 + 美食氛围调色</figcaption>
+    </figure>
+    <figure>
+      <video controls preload="metadata" style="width:100%;display:block;">
+        <source src="assets/edit-3.mp4" type="video/mp4">
+      </video>
+      <figcaption><b style="color:#e8e8ee;">《城市 · 圆形揭示》</b><br>蒙版转场 · 圆形遮罩揭示 + 城市空镜调色</figcaption>
     </figure>
   </div>
 
