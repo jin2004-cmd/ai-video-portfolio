@@ -59,7 +59,7 @@
     .carousel-control:hover { border-color: var(--cyan); color: var(--cyan); }
     .carousel-control.prev { left: 14px; }
     .carousel-control.next { right: 14px; }
-    .carousel-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+    .carousel-nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
     .carousel-nav button { min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 9px 10px; color: var(--muted); text-align: left; cursor: pointer; font-size: 11px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .carousel-nav button.active { color: var(--text); border-color: var(--cyan); background: var(--surface-2); }
     .band { padding: 76px 0; border-top: 1px solid var(--line); scroll-margin-top: 64px; }
@@ -143,17 +143,18 @@
         <div class="signal">短视频 / AIGC / 内容运营</div>
         <h1 id="page-title">视频作品集</h1>
         <p>千川投流素材、AI短片与个人剪辑练习，记录内容制作和后期处理中的实践。</p>
-        <div class="hero-meta"><span>10条视频</span><span>内容制作</span><span>后期剪辑</span></div>
+        <div class="hero-meta"><span>11条视频</span><span>内容制作</span><span>后期剪辑</span></div>
       </div>
       <div class="carousel" id="featured-carousel" aria-label="精选作品轮播">
         <div class="carousel-stage">
           <article class="carousel-slide active"><a href="#work-hou" aria-label="查看AI短片候"><img src="assets/creature.jpg" alt="AI短片候的画面" fetchpriority="high"><div class="slide-copy"><strong>AI短片《候》</strong><span>AI画面生成与后期剪辑</span></div></a></article>
+          <article class="carousel-slide"><a href="#work-wukong" aria-label="查看AI短片悟空"><img src="assets/wukong.jpg" alt="AI短片悟空的画面" loading="lazy"><div class="slide-copy"><strong>AI短片《悟空》</strong><span>AI画面与节奏剪辑</span></div></a></article>
           <article class="carousel-slide"><a href="#work-water" aria-label="查看色彩变化水波纹"><img src="assets/edit-2.jpg" alt="色彩变化水波纹画面" loading="lazy"><div class="slide-copy"><strong>色彩变化水波纹</strong><span>色彩与遮罩练习</span></div></a></article>
           <article class="carousel-slide"><a href="#work-grid" aria-label="查看九宫快闪"><img src="assets/edit-4.jpg" alt="九宫快闪画面" loading="lazy"><div class="slide-copy"><strong>九宫快闪</strong><span>多画面节奏练习</span></div></a></article>
           <article class="carousel-slide"><a href="#work-drama" aria-label="查看情侣小短剧"><img src="assets/edit-5.jpg" alt="情侣小短剧画面" loading="lazy"><div class="slide-copy"><strong>情侣小短剧</strong><span>对白与画面衔接</span></div></a></article>
           <button class="carousel-control prev" type="button" aria-label="上一张">‹</button><button class="carousel-control next" type="button" aria-label="下一张">›</button>
         </div>
-        <div class="carousel-nav" aria-label="选择精选作品"><button class="active" type="button">《候》</button><button type="button">水波纹</button><button type="button">九宫快闪</button><button type="button">情侣短剧</button></div>
+        <div class="carousel-nav" aria-label="选择精选作品"><button class="active" type="button">《候》</button><button type="button">《悟空》</button><button type="button">水波纹</button><button type="button">九宫快闪</button><button type="button">情侣短剧</button></div>
       </div>
     </section>
     <section class="band alt" id="commercial" aria-labelledby="commercial-title">
@@ -174,6 +175,7 @@
         <div class="section-head"><h2 id="editing-title">AI短片与剪辑</h2><p>包含AI画面生成、蒙版转场、多画面快切和短剧对白节奏练习。</p></div>
         <div class="landscape-grid">
           <article class="work-card" id="work-hou"><div class="media landscape"><video controls preload="none" poster="assets/creature.jpg" playsinline><source src="assets/hou-trailer.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">AI短片</span><h3>《候》</h3><p>AI画面生成与后期剪辑作品，1920×1080。</p></div></article>
+          <article class="work-card" id="work-wukong"><div class="media landscape"><video controls preload="none" poster="assets/wukong.jpg" playsinline><source src="assets/wukong.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">AI短片</span><h3>《悟空》</h3><p>AI画面与节奏剪辑练习，1280×720网页版本。</p></div></article>
           <article class="work-card" id="work-water"><div class="media landscape"><video controls preload="none" poster="assets/edit-2.jpg" playsinline><source src="assets/edit-2.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">剪辑练习</span><h3>色彩变化水波纹</h3><p>色彩变化与水波纹效果，1280×720网页版本。</p></div></article>
           <article class="work-card"><div class="media landscape"><video controls preload="none" poster="assets/edit-3.jpg" playsinline><source src="assets/edit-3.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">剪辑练习</span><h3>城市 · 圆形揭示</h3><p>蒙版转场与城市画面，1280×720网页版本。</p></div></article>
           <article class="work-card" id="work-grid"><div class="media landscape"><video controls preload="none" poster="assets/edit-4.jpg" playsinline><source src="assets/edit-4.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">剪辑练习</span><h3>九宫快闪</h3><p>九宫格画面与快切节奏，1280×720网页版本。</p></div></article>
