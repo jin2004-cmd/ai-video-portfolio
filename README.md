@@ -1,5 +1,13 @@
 # 🎬 AI 视频作品集
 
+<div align="center">
+
+[![在线观看](https://img.shields.io/badge/在线观看-手机也能看-4f6df5?style=for-the-badge)](https://jin2004-cmd.github.io/ai-video-portfolio/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge)](LICENSE)
+[![纯静态](https://img.shields.io/badge/站点-纯静态无构建-22c55e?style=for-the-badge)](#技术说明)
+
+</div>
+
 > 🟢 **在线观看（手机也能看）**：[jin2004-cmd.github.io/ai-video-portfolio](https://jin2004-cmd.github.io/ai-video-portfolio/)
 >
 > 里面还藏了一个我做的小应用：[`/offer-agent/` 秋招求职引擎](https://jin2004-cmd.github.io/ai-video-portfolio/offer-agent/)（[源码](offer-agent/index.html)，手机端可添加到主屏幕当 App 用）
@@ -41,3 +49,19 @@
 ## 实话实说
 
 这些是学生作品，不是商业项目；部分练习片目前还是标清，我在陆续换成 1080p。练习片和成片放一起，是因为我觉得**只给看成片，看不出人是怎么一点点做对的**。
+
+---
+
+## English
+
+**AI Video Portfolio** — a pure-static site (single `index.html` + media assets on GitHub Pages, no build step) showcasing AI-generated short films made end-to-end by one person. The feature piece "候 (Waiting)" is a 27-second game-CG-style short made for a 48-hour AI animation test: character consistency locked via a three-view master-sheet method with Seedream text-to-image, animated with Seedance image-to-video, finished in CapCut. Also includes a realistic-style practice film, five commercial short-ad verticals produced during an internship, and motion-design exercises. Poster frames are exported separately so mobile never auto-loads video.
+
+👉 Watch online: <https://jin2004-cmd.github.io/ai-video-portfolio/>
+
+---
+
+<div align="center">
+
+如果这条「三视图锁角色一致性」的管线对你有启发，欢迎 ⭐ **Star** 一下。
+
+</div>
