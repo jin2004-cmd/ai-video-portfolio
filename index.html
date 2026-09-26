@@ -160,7 +160,7 @@
     .section-head h2::before { content: ""; position: absolute; left: 0; top: .16em; bottom: .16em; width: 3px; background: var(--cyan); box-shadow: 0 0 10px rgba(67, 214, 247, .5); }
     /* ===== 点缀：滚动揭示（JS 挂 .pre → .is-visible） ===== */
     .rv.pre { opacity: 0; }
-    .rv.is-visible { animation: rvIn .7s cubic-bezier(.2, .6, .2, 1) backwards; animation-delay: var(--rv-delay, 0ms); }
+    .rv.is-visible { opacity: 1; animation: rvIn .7s cubic-bezier(.2, .6, .2, 1) backwards; animation-delay: var(--rv-delay, 0ms); }
     @keyframes rvIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
     /* ===== 点缀：hero 入场 ===== */
     .hero .signal, .hero h1, .hero-copy > p, .hero-meta, .carousel { animation: heroIn .8s cubic-bezier(.2, .6, .2, 1) backwards; }
@@ -324,7 +324,7 @@
       document.querySelectorAll(".portrait-grid, .landscape-grid, .tools").forEach((grid) => {
         [...grid.children].forEach((child, i) => child.style.setProperty("--rv-delay", (i * 70) + "ms"));
       });
-      if ("IntersectionObserver" in window) {
+      if ("IntersectionObserver" in window && window.self === window.top) {
         let ioFired = false;
         rvTargets.forEach((el) => el.classList.add("rv", "pre"));
         const io = new IntersectionObserver((entries) => {
