@@ -127,6 +127,27 @@
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
+    .nav-shot { padding: 22px 0 19px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); font-size: 13px; cursor: pointer; }
+    .nav-shot:hover { color: var(--text); border-bottom-color: var(--cyan); }
+    .shot-inline { display: inline-block; margin-top: 8px; color: var(--cyan); font-size: 13px; border-bottom: 1px solid transparent; }
+    .shot-inline:hover { border-bottom-color: var(--cyan); }
+    .shot-modal { position: fixed; inset: 0; z-index: 90; display: none; align-items: center; justify-content: center; padding: 24px; }
+    .shot-modal.open { display: flex; }
+    .shot-modal-mask { position: absolute; inset: 0; background: rgba(4, 6, 9, .82); backdrop-filter: blur(4px); animation: shotFade .2s; }
+    .shot-modal-panel { position: relative; width: min(980px, 100%); height: min(86vh, 860px); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; animation: shotRise .24s ease; }
+    .shot-modal-bar { display: flex; align-items: center; justify-content: space-between; height: 46px; padding: 0 8px 0 18px; border-bottom: 1px solid var(--line); background: var(--surface); }
+    .shot-modal-bar span { font-size: 14px; font-weight: 600; color: var(--text); }
+    .shot-modal-close { width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface-2); color: var(--muted); font-size: 16px; line-height: 1; cursor: pointer; }
+    .shot-modal-close:hover { color: var(--text); border-color: var(--muted); }
+    .shot-modal iframe { width: 100%; height: calc(100% - 46px); border: 0; display: block; background: #0b0f16; }
+    @keyframes shotFade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes shotRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    body.shot-locked { overflow: hidden; }
+    @media (max-width: 700px) {
+      .nav-shot { padding: 12px 0; text-align: left; border-bottom: 1px solid var(--line-soft); }
+      .shot-modal { padding: 0; }
+      .shot-modal-panel { width: 100%; height: 100%; border: 0; border-radius: 0; }
+    }
   </style>
 </head>
 <body>
@@ -134,7 +155,7 @@
     <div class="wrap nav">
       <a class="brand" href="#top"><span class="brand-mark"></span><span>金佳信 / 视频作品集</span><small>2026</small></a>
       <button class="menu" id="menu" type="button" aria-label="打开导航" aria-expanded="false">≡</button>
-      <nav class="nav-links" id="nav-links" aria-label="主导航"><a href="#commercial">千川素材</a><a href="#editing">AI短片与剪辑</a><a href="#tools">Agent项目</a><a href="#about">个人简介</a></nav>
+      <nav class="nav-links" id="nav-links" aria-label="主导航"><a href="#commercial">千川素材</a><a href="#editing">AI短片与剪辑</a><a href="#tools">Agent项目</a><a href="#about">个人简介</a><button class="nav-shot" type="button" data-open-shot>分镜脚本</button></nav>
     </div>
   </header>
   <main id="top">
@@ -174,7 +195,7 @@
       <div class="wrap">
         <div class="section-head"><h2 id="editing-title">AI短片与剪辑</h2><p>包含AI画面生成、蒙版转场、多画面快切和短剧对白节奏练习。</p></div>
         <div class="landscape-grid">
-          <article class="work-card" id="work-hou"><div class="media landscape"><video controls preload="none" poster="assets/creature.jpg" playsinline><source src="assets/hou-trailer.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">AI短片</span><h3>《候》</h3><p>AI画面生成与后期剪辑作品，1920×1080。</p></div></article>
+          <article class="work-card" id="work-hou"><div class="media landscape"><video controls preload="none" poster="assets/creature.jpg" playsinline><source src="assets/hou-trailer.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">AI短片</span><h3>《候》</h3><p>AI画面生成与后期剪辑作品，1920×1080。</p><a class="shot-inline" href="#" data-open-shot>查看分镜脚本 →</a></div></article>
           <article class="work-card" id="work-wukong"><div class="media landscape"><video controls preload="none" poster="assets/wukong.jpg" playsinline><source src="assets/wukong.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">AI短片</span><h3>《悟空》</h3><p>AI画面与节奏剪辑练习，1280×720网页版本。</p></div></article>
           <article class="work-card" id="work-water"><div class="media landscape"><video controls preload="none" poster="assets/edit-2.jpg" playsinline><source src="assets/edit-2.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">剪辑练习</span><h3>色彩变化水波纹</h3><p>色彩变化与水波纹效果，1280×720网页版本。</p></div></article>
           <article class="work-card"><div class="media landscape"><video controls preload="none" poster="assets/edit-3.jpg" playsinline><source src="assets/edit-3.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">剪辑练习</span><h3>城市 · 圆形揭示</h3><p>蒙版转场与城市画面，1280×720网页版本。</p></div></article>
@@ -216,6 +237,21 @@
     const sections = [...document.querySelectorAll("section[id]")];
     const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (!entry.isIntersecting) return; navLinks.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === "#" + entry.target.id)); }), { rootMargin: "-38% 0px -55% 0px" });
     sections.forEach((section) => observer.observe(section));
+  </script>
+  <div class="shot-modal" id="shot-modal" role="dialog" aria-modal="true" aria-label="《候》分镜脚本">
+    <div class="shot-modal-mask" data-close-shot></div>
+    <div class="shot-modal-panel">
+      <div class="shot-modal-bar"><span>《候》分镜脚本</span><button class="shot-modal-close" type="button" data-close-shot aria-label="关闭">×</button></div>
+      <iframe src="storyboard.html" title="《候》分镜脚本" loading="lazy"></iframe>
+    </div>
+  </div>
+  <script>
+    const shotModal = document.getElementById("shot-modal");
+    function openShot() { shotModal.classList.add("open"); document.body.classList.add("shot-locked"); }
+    function closeShot() { shotModal.classList.remove("open"); document.body.classList.remove("shot-locked"); }
+    document.querySelectorAll("[data-open-shot]").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); openShot(); }));
+    document.querySelectorAll("[data-close-shot]").forEach((el) => el.addEventListener("click", closeShot));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && shotModal.classList.contains("open")) closeShot(); });
   </script>
 </body>
 </html>

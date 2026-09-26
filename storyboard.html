@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《候》分镜脚本</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z' fill='%235db1ff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+  :root{
+    --bg:#0b0f16; --surface:#121924; --surface2:#1a2332; --line:#232f42;
+    --text:#e9edf4; --sub:#93a0b4; --weak:#5f6c80;
+    --blue:#5db1ff; --red:#ff5f4d; --amber:#c98a2e;
+    --act1:#5b7a9d; --act2:#c0523a; --act3:#2f8fb0; --act4:#c98a2e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans SC',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .serif{font-family:'Noto Serif SC',serif}
+
+  /* ===== Hero ===== */
+  .hero{position:relative;min-height:520px;display:flex;align-items:center;justify-content:center;overflow:hidden;text-align:center;padding:80px 20px 64px}
+  .hero-bg{position:absolute;inset:0;background-image:url('https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/T77VbEnZBomuIVxiNXQce5K2n8b');background-size:cover;background-position:center;opacity:.32;filter:saturate(1.05)}
+  .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,15,22,.55) 0%,rgba(11,15,22,.82) 62%,var(--bg) 100%)}
+  .hero-inner{position:relative;max-width:880px;z-index:1}
+  .hero .kicker{display:inline-block;font-size:13px;letter-spacing:.42em;color:var(--sub);border:1px solid var(--line);border-radius:2px;padding:6px 18px 6px 24px;margin-bottom:26px;text-transform:uppercase}
+  .hero h1{font-size:clamp(64px,12vw,128px);font-weight:900;letter-spacing:.14em;line-height:1.05;color:var(--text)}
+  .hero h1 .v{color:var(--blue)}
+  .hero .subtitle{margin-top:18px;font-size:17px;color:var(--sub);letter-spacing:.18em}
+  .hero .meta{margin-top:34px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+  .hero .meta span{font-size:13px;color:var(--text);background:rgba(18,25,36,.72);border:1px solid var(--line);border-radius:99px;padding:7px 16px;backdrop-filter:blur(4px)}
+  .scroll-hint{margin-top:44px;font-size:12px;color:var(--weak);letter-spacing:.3em}
+
+  /* ===== 布局容器 ===== */
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+  /* ===== 概览时间轴 ===== */
+  .overview{padding:56px 0 20px}
+  .section-title{font-size:26px;font-weight:700;margin-bottom:6px;letter-spacing:.08em}
+  .section-title .no{color:var(--blue);font-size:14px;letter-spacing:.3em;display:block;margin-bottom:8px}
+  .section-desc{color:var(--sub);font-size:14px;margin-bottom:28px}
+  .timeline{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px 18px}
+  .t-start,.t-end{font-size:12px;color:var(--weak);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .t-track{flex:1;display:flex;height:56px;border-radius:6px;overflow:hidden;margin:0 12px}
+  .t-seg{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-size:12px;line-height:1.5;cursor:pointer;transition:filter .2s}
+  .t-seg:hover{filter:brightness(1.15)}
+  .t-seg b{font-size:13px}
+  .t-seg small{opacity:.85;font-size:11px}
+  .t-mark{display:flex;margin-left:50px;margin-right:50px;margin-top:8px}
+  .t-mark div{flex:1;text-align:center;font-size:11px;color:var(--weak);font-variant-numeric:tabular-nums}
+
+  /* ===== 幕折叠 ===== */
+  .acts{padding:24px 0 40px}
+  .act{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden;transition:border-color .25s}
+  .act.open{border-color:rgba(255,255,255,.14)}
+  .act-head{display:flex;align-items:center;gap:16px;padding:18px 20px;cursor:pointer;user-select:none;position:relative}
+  .act-stripe{width:5px;align-self:stretch;border-radius:3px;flex-shrink:0}
+  .act-thumb{width:92px;height:56px;border-radius:6px;object-fit:cover;flex-shrink:0;border:1px solid var(--line)}
+  .act-title{flex:1;min-width:0}
+  .act-title h3{font-size:18px;font-weight:700;letter-spacing:.05em}
+  .act-title .en{font-size:12px;color:var(--sub);letter-spacing:.22em;margin-top:2px}
+  .act-time{font-size:12px;color:var(--weak);font-variant-numeric:tabular-nums;text-align:right;line-height:1.8}
+  .act-time b{display:block;font-size:15px;color:var(--text);font-weight:500}
+  .act-chevron{width:22px;height:22px;flex-shrink:0;transition:transform .28s;color:var(--sub)}
+  .act.open .act-chevron{transform:rotate(180deg);color:var(--text)}
+  .act-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+  .act.open .act-body{max-height:2000px}
+  .shot-list{border-top:1px solid var(--line)}
+  .shot{display:grid;grid-template-columns:56px 108px 74px 96px 1fr 26px;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid rgba(35,47,66,.55);cursor:pointer;transition:background .18s}
+  .shot:last-child{border-bottom:none}
+  .shot:hover{background:var(--surface2)}
+  .shot .n{font-size:13px;color:var(--weak);font-variant-numeric:tabular-nums}
+  .shot .n b{display:block;font-size:16px;color:var(--text);font-weight:700}
+  .shot .tc{font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums;letter-spacing:.03em}
+  .shot .tc b{display:block;font-size:13px;color:var(--blue);font-weight:500}
+  .shot .dur{font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
+  .shot .shot-jing{font-size:13px;color:var(--sub)}
+  .shot .desc{font-size:14px;color:var(--text);line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .shot .arrow{color:var(--weak);font-size:16px;text-align:right}
+  .shot:hover .arrow{color:var(--blue)}
+  .shot-note{display:none}
+
+  /* ===== Modal ===== */
+  .modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
+  .modal.open{display:flex}
+  .modal-mask{position:absolute;inset:0;background:rgba(6,9,14,.78);backdrop-filter:blur(3px);animation:fade .2s}
+  .modal-card{position:relative;width:100%;max-width:600px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:30px 30px 26px;animation:rise .24s ease;max-height:88vh;overflow-y:auto}
+  .modal-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--sub);font-size:18px;cursor:pointer;line-height:1}
+  .modal-close:hover{color:var(--text);border-color:var(--sub)}
+  .modal .m-kicker{font-size:12px;letter-spacing:.3em;color:var(--blue);margin-bottom:8px}
+  .modal h4{font-size:24px;font-weight:700;margin-bottom:4px}
+  .modal .m-time{font-size:13px;color:var(--sub);margin-bottom:20px;font-variant-numeric:tabular-nums}
+  .m-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+  .m-cell{background:var(--surface2);border-radius:8px;padding:10px 14px}
+  .m-cell .k{font-size:11px;color:var(--weak);letter-spacing:.14em;margin-bottom:3px}
+  .m-cell .v{font-size:15px;color:var(--text)}
+  .m-section{font-size:12px;color:var(--weak);letter-spacing:.14em;margin:16px 0 6px}
+  .m-text{font-size:14px;color:var(--text);line-height:1.8}
+  .m-divider{height:1px;background:var(--line);margin:16px 0}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* ===== Footer ===== */
+  footer{padding:44px 20px 56px;text-align:center;border-top:1px solid var(--line);margin-top:16px}
+  footer .f-title{font-size:20px;font-weight:700;letter-spacing:.3em;margin-bottom:10px}
+  footer .f-sub{font-size:13px;color:var(--weak);letter-spacing:.14em}
+
+  /* ===== 响应式 ===== */
+  @media (max-width:760px){
+    .hero{min-height:440px;padding:64px 16px 48px}
+    .hero h1{font-size:clamp(56px,22vw,88px)}
+    .act-head{gap:12px;padding:14px 14px}
+    .act-thumb{display:none}
+    .shot{grid-template-columns:40px 96px 60px 80px 1fr 18px;gap:8px;padding:12px 14px}
+    .shot .desc{white-space:normal}
+    .t-mark{margin-left:16px;margin-right:16px}
+    .timeline{flex-wrap:wrap;gap:8px}
+    .m-grid{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <span class="kicker serif">Concept · Storyboard</span>
+    <h1 class="serif">《候<span class="v">》</span></h1>
+    <div class="subtitle serif">赛博朋克 × 仙侠 · 概念战斗短片</div>
+    <div class="meta">
+      <span>27.7 s</span><span>1920 × 1080</span><span>30 fps</span><span>17 镜</span><span>四幕结构</span>
+    </div>
+    <div class="scroll-hint">向下浏览分镜</div>
+  </div>
+</header>
+
+<!-- ===== 概览 ===== -->
+<section class="overview wrap">
+  <div class="section-title"><span class="no">OVERVIEW</span>四幕结构</div>
+  <div class="section-desc">环境入场 → 主角登场 → 蓄力奔袭 → 决战留白。全片平均镜头 1.6 秒，以快切节奏推进战斗叙事，冷蓝剑光与赤红魔焰贯穿始终。</div>
+  <div class="timeline">
+    <span class="t-start">00:00</span>
+    <div class="t-track">
+      <div class="t-seg" style="background:var(--act1);width:18.4%" data-act="0"><b>一</b><small>入场</small></div>
+      <div class="t-seg" style="background:var(--act2);width:18.4%" data-act="1"><b>二</b><small>登场</small></div>
+      <div class="t-seg" style="background:var(--act3);width:36.1%" data-act="2"><b>三</b><small>蓄力奔袭</small></div>
+      <div class="t-seg" style="background:var(--act4);width:27.1%" data-act="3"><b>四</b><small>决战留白</small></div>
+    </div>
+    <span class="t-end">00:27.7</span>
+  </div>
+  <div class="t-mark"><div>00:05.1</div><div>00:10.2</div><div>00:20.2</div><div>00:27.7</div></div>
+</section>
+
+<!-- ===== 分镜列表 ===== -->
+<section class="acts wrap" id="acts">
+  <div class="section-title" style="margin-bottom:6px"><span class="no">SHOT LIST</span>分镜脚本</div>
+  <div class="section-desc">点击任意镜头查看景别、运镜与声音设计。</div>
+  <div id="actList"></div>
+</section>
+
+<footer>
+  <div class="f-title serif">候</div>
+  <div class="f-sub">AI 概念短片 · 分镜脚本 · 2026</div>
+</footer>
+
+<!-- ===== Modal ===== -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-mask" id="modalMask"></div>
+  <div class="modal-card" id="modalCard"></div>
+</div>
+
+<script>
+(function(){
+  var ACTS = [
+    {
+      name:'第一幕', en:'ENTRY', time:'00:00 – 00:05.1', color:'var(--act1)', img:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/YDn6bGP45ow6HqxYFjBc0kYSnlf',
+      shots:[
+        {n:1, t:'00:00', d:'1.0s', jing:'大远景', cam:'固定机位', desc:'雨夜赛博都市全景：高楼林立、霓虹招牌，地面蔓延红色裂纹光效。', sound:'环境底噪 + 低频氛围音', cut:'硬切'},
+        {n:2, t:'00:01', d:'2.0s', jing:'中景', cam:'横向平移跟随', desc:'黑色乌鸦展翅飞过画面中景，剪影感，背景都市虚化。', sound:'乌鸦振翅音效', cut:'硬切'},
+        {n:3, t:'00:03', d:'2.1s', jing:'中近景', cam:'缓慢推进', desc:'红白骨骼纹路人形怪物背影浮现，周身红色电光线条。', sound:'压迫感低音渐强', cut:'硬切'}
+      ]
+    },
+    {
+      name:'第二幕', en:'ARRIVAL', time:'00:05.1 – 00:10.2', color:'var(--act2)', img:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/GUR2bhAKYohA7CxCAoNcXCmyned',
+      shots:[
+        {n:4, t:'00:05.1', d:'1.4s', jing:'中景', cam:'固定机位', desc:'白色骷髅装甲人形（主角）现身，红色光效勾勒装甲纹路。', sound:'音效爆发点', cut:'硬切'},
+        {n:5, t:'00:06.5', d:'1.5s', jing:'大特写', cam:'轻微推进', desc:'发光红色骷髅头，黑鸦掠入前景。', sound:'低频心跳感', cut:'硬切'},
+        {n:6, t:'00:08', d:'1.0s', jing:'特写 · 低角度', cam:'固定机位', desc:'角色腿部特写，装甲细节，脚下地面裂纹发光。', sound:'金属 / 机械音效', cut:'硬切'},
+        {n:7, t:'00:09', d:'1.2s', jing:'全景', cam:'固定机位', desc:'狰狞怪物于废墟背景中现身，占据画面主体。', sound:'威胁性低鸣', cut:'硬切'}
+      ]
+    },
+    {
+      name:'第三幕', en:'CHARGE', time:'00:10.2 – 00:20.2', color:'var(--act3)', img:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/LUKlbnd4cohO21xW9kFcObGcnPb',
+      shots:[
+        {n:8, t:'00:10.2', d:'1.3s', jing:'中景', cam:'固定机位', desc:'角色背影立于雨中，蓄势待发。', sound:'雨声收束', cut:'硬切'},
+        {n:9, t:'00:11.5', d:'1.5s', jing:'特写', cam:'缓慢下摇', desc:'蓝色光刃划破水面，泛起能量涟漪。', sound:'剑鸣 + 水声', cut:'硬切'},
+        {n:10, t:'00:13', d:'2.0s', jing:'大特写', cam:'固定机位', desc:'白发侠客持发光长剑，冷蓝剑光，面部轮廓隐现。', sound:'音乐进入', cut:'硬切'},
+        {n:11, t:'00:15', d:'1.5s', jing:'中景', cam:'轻微后拉', desc:'巨型魔物红纹虚影现身，与侠客同框。', sound:'弦乐 + 低鼓', cut:'硬切'},
+        {n:12, t:'00:16.5', d:'1.0s', jing:'全景', cam:'固定机位', desc:'都市废墟战场全貌交代，霓虹与废墟并存。', sound:'环境音恢复', cut:'硬切'},
+        {n:13, t:'00:17.5', d:'2.7s', jing:'全景 → 近景', cam:'快速推进跟拍', desc:'侠客持剑向前奔袭，白色放射光效伴随冲刺，能量向四周扩散。', sound:'鼓点密集加速', cut:'硬切'}
+      ]
+    },
+    {
+      name:'第四幕', en:'DUEL', time:'00:20.2 – 00:27.7', color:'var(--act4)', img:'https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/JmgtbYOmCooLCgxJUxLc3bw1n4f',
+      shots:[
+        {n:14, t:'00:20.2', d:'1.8s', jing:'全景', cam:'固定机位', desc:'白发持光刃侠客 vs 巨型红色恶魔虚影，大小对比强烈。', sound:'音乐高潮前置', cut:'硬切'},
+        {n:15, t:'00:22', d:'3.0s', jing:'中近景', cam:'轻微环绕', desc:'光刃划出环形光效，红色能量碎屑迸发。', sound:'技能音效爆点', cut:'硬切'},
+        {n:16, t:'00:25', d:'2.0s', jing:'大特写', cam:'固定机位', desc:'眼部特写，瞳孔中倒映恶魔战斗身影。', sound:'音乐骤停 · 静默', cut:'硬切'},
+        {n:17, t:'00:27', d:'0.7s', jing:'远景', cam:'固定长镜', desc:'日式街道，粉白光晕笼罩，小人背影走向巨大尖角铠甲虚影，留白收尾。', sound:'环境音渐起 · 黑场', cut:'黑场结束'}
+      ]
+    }
+  ];
+
+  var fmt = function(s){return s.replace('00:','0:').replace(/^0:/,'');};
+  var actList = document.getElementById('actList');
+  var html = '';
+  ACTS.forEach(function(a, ai){
+    html += '<div class="act" id="act'+ai+'" data-idx="'+ai+'">';
+    html += '<div class="act-head">';
+    html += '<div class="act-stripe" style="background:'+a.color+'"></div>';
+    html += '<img class="act-thumb" src="'+a.img+'" alt="'+a.name+'画面" loading="lazy">';
+    html += '<div class="act-title"><h3>'+a.name+' <span style="font-size:13px;color:var(--sub);font-weight:400">'+a.shots.length+' 镜</span></h3><div class="en">'+a.en+'</div></div>';
+    html += '<div class="act-time"><b>'+a.time+'</b>'+ (ai===0?'总览':'') +'</div>';
+    html += '<svg class="act-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
+    html += '</div>';
+    html += '<div class="act-body"><div class="shot-list">';
+    a.shots.forEach(function(s){
+      html += '<div class="shot" data-act="'+ai+'" data-shot="'+s.n+'">';
+      html += '<div class="n">镜<b>'+s.n+'</b></div>';
+      html += '<div class="tc"><b>'+s.t+'</b>'+s.d+'</div>';
+      html += '<div class="shot-jing">'+s.jing+'</div>';
+      html += '<div class="dur">'+s.cam+'</div>';
+      html += '<div class="desc">'+s.desc+'</div>';
+      html += '<div class="arrow">›</div>';
+      html += '</div>';
+    });
+    html += '</div></div></div>';
+  });
+  actList.innerHTML = html;
+
+  var acts = document.querySelectorAll('.act');
+  acts[0].classList.add('open');
+  var actHeads = document.querySelectorAll('.act-head');
+  actHeads.forEach(function(h){
+    h.addEventListener('click', function(){
+      var p = h.parentElement;
+      var open = p.classList.contains('open');
+      acts.forEach(function(x){x.classList.remove('open')});
+      if(!open) p.classList.add('open');
+    });
+  });
+  document.querySelectorAll('.t-seg').forEach(function(seg){
+    seg.addEventListener('click', function(){
+      var ai = +seg.getAttribute('data-act');
+      acts.forEach(function(x){x.classList.remove('open')});
+      acts[ai].classList.add('open');
+      acts[ai].scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+
+  var modal = document.getElementById('modal');
+  var card = document.getElementById('modalCard');
+  function openShot(ai, n){
+    var s = ACTS[ai].shots.find(function(x){return x.n===n});
+    if(!s) return;
+    card.innerHTML =
+      '<button class="modal-close" id="mClose" aria-label="关闭">×</button>' +
+      '<div class="m-kicker">SHOT '+s.n+' · '+ACTS[ai].en+'</div>' +
+      '<h4 class="serif">'+ACTS[ai].name+' · 镜 '+s.n+'</h4>' +
+      '<div class="m-time">'+fmt(s.t)+' 起 · 时长 '+s.d+'</div>' +
+      '<div class="m-grid">' +
+        '<div class="m-cell"><div class="k">景别</div><div class="v">'+s.jing+'</div></div>' +
+        '<div class="m-cell"><div class="k">运镜</div><div class="v">'+s.cam+'</div></div>' +
+      '</div>' +
+      '<div class="m-section">画面内容</div><div class="m-text">'+s.desc+'</div>' +
+      '<div class="m-divider"></div>' +
+      '<div class="m-section">声音设计</div><div class="m-text">'+s.sound+'</div>' +
+      '<div class="m-section">转场</div><div class="m-text">'+s.cut+'</div>';
+    modal.classList.add('open');
+    document.body.style.overflow='hidden';
+    document.getElementById('mClose').addEventListener('click', closeModal);
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    document.body.style.overflow='';
+  }
+  document.querySelectorAll('.shot').forEach(function(row){
+    row.addEventListener('click', function(){
+      openShot(+row.getAttribute('data-act'), +row.getAttribute('data-shot'));
+    });
+  });
+  document.getElementById('modalMask').addEventListener('click', closeModal);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+})();
+</script>
+</body>
+</html>
