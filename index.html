@@ -148,9 +148,63 @@
       .shot-modal { padding: 0; }
       .shot-modal-panel { width: 100%; height: 100%; border: 0; border-radius: 0; }
     }
+    /* ===== 点缀：滚动进度条 ===== */
+    .progress { position: fixed; top: 0; left: 0; z-index: 60; width: 0; height: 2px; background: linear-gradient(90deg, var(--cyan), #8fe7ff); box-shadow: 0 0 12px rgba(67, 214, 247, .55); }
+    /* ===== 点缀：背景微网格纹理 ===== */
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(255, 255, 255, .022) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .022) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 74%); mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 74%); }
+    /* ===== 点缀：选中文字 ===== */
+    ::selection { background: rgba(67, 214, 247, .28); color: #fff; }
+    /* ===== 点缀：大标题与章节标题 ===== */
+    h1 { background: linear-gradient(180deg, #f4f7fa 32%, #9be8fb 135%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--text); }
+    .section-head h2 { position: relative; padding-left: 16px; }
+    .section-head h2::before { content: ""; position: absolute; left: 0; top: .16em; bottom: .16em; width: 3px; background: var(--cyan); box-shadow: 0 0 10px rgba(67, 214, 247, .5); }
+    /* ===== 点缀：滚动揭示（JS 挂 .pre → .is-visible） ===== */
+    .rv.pre { opacity: 0; }
+    .rv.is-visible { animation: rvIn .7s cubic-bezier(.2, .6, .2, 1) backwards; animation-delay: var(--rv-delay, 0ms); }
+    @keyframes rvIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+    /* ===== 点缀：hero 入场 ===== */
+    .hero .signal, .hero h1, .hero-copy > p, .hero-meta, .carousel { animation: heroIn .8s cubic-bezier(.2, .6, .2, 1) backwards; }
+    .hero .signal { animation-delay: .05s; }
+    .hero h1 { animation-delay: .14s; }
+    .hero-copy > p { animation-delay: .26s; }
+    .hero-meta { animation-delay: .36s; }
+    .carousel { animation-delay: .18s; animation-duration: .9s; }
+    @keyframes heroIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    /* ===== 点缀：卡片与工具行 hover ===== */
+    .work-card, .tool-row { transition: transform .3s cubic-bezier(.2, .6, .2, 1), border-color .3s, box-shadow .3s; }
+    .work-card:hover, .tool-row:hover { transform: translateY(-4px); border-color: rgba(67, 214, 247, .45); box-shadow: 0 12px 28px rgba(0, 0, 0, .38), 0 0 0 1px rgba(67, 214, 247, .12); }
+    .media { transition: none; }
+    .work-card .media img, .work-card .media video { transition: transform .5s cubic-bezier(.2, .6, .2, 1); }
+    .work-card:hover .media img, .work-card:hover .media video { transform: scale(1.045); }
+    .work-copy h3, .work-type, .tool-row h3 { transition: color .25s; }
+    .work-card:hover .work-copy h3 { color: var(--cyan); }
+    .work-card:hover .work-type { color: #ff938c; }
+    .tool-row:hover h3 { color: var(--cyan); }
+    .tool-row a { transition: color .25s; }
+    .tool-row a:hover { color: #9be8fb; }
+    .shot-inline { transition: color .25s, border-color .25s; }
+    .shot-inline:hover { color: #9be8fb; }
+    /* ===== 点缀：导航 ===== */
+    .site-header { transition: box-shadow .3s, background .3s; }
+    body.scrolled .site-header { box-shadow: 0 8px 24px rgba(0, 0, 0, .32); background: rgba(9, 11, 14, .98); }
+    .nav-links a { position: relative; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 12px; height: 1px; background: var(--cyan); transition: right .3s cubic-bezier(.2, .6, .2, 1); }
+    .nav-links a:hover::after, .nav-links a.active::after { right: 0; }
+    .menu { transition: border-color .25s, color .25s; }
+    .menu:hover { border-color: var(--cyan); color: var(--cyan); }
+    .nav-links.open { animation: menuIn .24s ease; }
+    @keyframes menuIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+    /* ===== 点缀：轮播 ===== */
+    .carousel-nav button { position: relative; transition: color .25s, border-color .25s, background .25s; }
+    .carousel-nav button::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 0; height: 2px; background: var(--cyan); transform: scaleX(0); transform-origin: left; transition: transform .3s cubic-bezier(.2, .6, .2, 1); }
+    .carousel-nav button:hover::after, .carousel-nav button.active::after { transform: scaleX(1); }
+    .slide-copy strong { text-shadow: 0 2px 14px rgba(0, 0, 0, .55); }
+    /* ===== 点缀：数字等宽对齐 ===== */
+    .fact strong { font-variant-numeric: tabular-nums; }
   </style>
 </head>
 <body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap nav">
       <a class="brand" href="#top"><span class="brand-mark"></span><span>金佳信 / 视频作品集</span><small>2026</small></a>
@@ -252,6 +306,74 @@
     document.querySelectorAll("[data-open-shot]").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); openShot(); }));
     document.querySelectorAll("[data-close-shot]").forEach((el) => el.addEventListener("click", closeShot));
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && shotModal.classList.contains("open")) closeShot(); });
+  </script>
+  <script>
+    (function () {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const progress = document.getElementById("progress");
+      function onScroll() {
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - doc.clientHeight;
+        progress.style.width = (max > 0 ? (doc.scrollTop / max) * 100 : 0) + "%";
+        document.body.classList.toggle("scrolled", doc.scrollTop > 24);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+      if (reduce) return;
+      const rvTargets = [...document.querySelectorAll(".section-head, .facts, .about, .tool-row, .work-card")];
+      document.querySelectorAll(".portrait-grid, .landscape-grid, .tools").forEach((grid) => {
+        [...grid.children].forEach((child, i) => child.style.setProperty("--rv-delay", (i * 70) + "ms"));
+      });
+      if ("IntersectionObserver" in window) {
+        let ioFired = false;
+        rvTargets.forEach((el) => el.classList.add("rv", "pre"));
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) { entry.target.classList.add("is-visible"); io.unobserve(entry.target); ioFired = true; }
+          });
+        }, { threshold: 0.16, rootMargin: "0px 0px -6% 0px" });
+        rvTargets.forEach((el) => io.observe(el));
+        let guardTries = 0;
+        const guard = setInterval(() => {
+          if (ioFired) { clearInterval(guard); return; }
+          rvTargets.forEach((el) => {
+            if (el.classList.contains("is-visible")) return;
+            const r = el.getBoundingClientRect();
+            const vh = window.innerHeight || document.documentElement.clientHeight;
+            if (r.top < vh * 0.94 && r.bottom > 0) el.classList.add("is-visible");
+          });
+          guardTries += 1;
+          if (guardTries >= 12) { clearInterval(guard); rvTargets.forEach((el) => el.classList.add("is-visible")); }
+        }, 500);
+      }
+      function animateCount(el) {
+        const text = el.textContent;
+        const nums = text.match(/\d+(\.\d+)?/g);
+        if (!nums || nums.length > 2) return;
+        const start = performance.now();
+        const dur = 900;
+        function tick(now) {
+          const p = Math.min(1, (now - start) / dur);
+          const ease = 1 - Math.pow(1 - p, 3);
+          const values = nums.map((n, i) => {
+            const from = i === 0 ? 0 : parseFloat(nums[i - 1]);
+            return Math.round(from + (parseFloat(n) - from) * ease);
+          });
+          let k = 0;
+          el.textContent = text.replace(/\d+(\.\d+)?/g, () => String(values[k++]));
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+      const countIO = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          countIO.unobserve(entry.target);
+          animateCount(entry.target);
+        });
+      }, { threshold: 0.5 });
+      document.querySelectorAll(".fact strong").forEach((el) => countIO.observe(el));
+    })();
   </script>
 </body>
 </html>
