@@ -1,10 +1,27 @@
 <!doctype html>
+<!--
+  金佳信 · 视频作品集 · ai-video-portfolio
+  单文件零依赖（可 file:// 直开，也可 GitHub Pages 部署）
+  结构：header 导航 → hero 轮播 → ticker 技能条 → 6 个 band 板块 → footer → 分镜弹窗 → 脚本
+  如何加视频/项目/板块：见 ../维护手册.md；四视角评审记录：见 ../评审与迭代记录.md
+-->
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="金佳信的视频作品集，包含千川投流素材、AI短片和剪辑练习。">
+  <meta name="description" content="金佳信的视频作品集，包含程序化影像、AIGC短片、千川投流素材和剪辑练习，并记录从内容制作走向 AI 应用与程序化创作的实践。">
+  <meta name="theme-color" content="#090b0e">
+  <link rel="canonical" href="https://jin2004-cmd.github.io/ai-video-portfolio/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="金佳信 · 视频作品集">
+  <meta property="og:description" content="程序化影像 / AIGC 短片 / 千川投流素材——从内容制作走向 AI 应用与程序化创作。">
+  <meta property="og:url" content="https://jin2004-cmd.github.io/ai-video-portfolio/">
+  <meta property="og:image" content="https://jin2004-cmd.github.io/ai-video-portfolio/assets/dragon-v3.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <title>金佳信 · 视频作品集</title>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Person","name":"金佳信","alternateName":"Jin Jiaxin","url":"https://jin2004-cmd.github.io/ai-video-portfolio/","sameAs":["https://github.com/jin2004-cmd"],"jobTitle":"AIGC 创作者 / 2027 届","knowsAbout":["Remotion","React","TypeScript","AIGC 视频制作","短视频剪辑","内容运营","AI Agent"]}
+  </script>
   <style>
     :root {
       color-scheme: dark;
@@ -19,6 +36,7 @@
       --coral: #ff6c65;
       --radius: 4px;
       --sans: "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Consolas, "Courier New", monospace;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -37,14 +55,14 @@
     .nav-links a { padding: 22px 0 19px; border-bottom: 2px solid transparent; }
     .nav-links a:hover, .nav-links a.active { color: var(--text); border-bottom-color: var(--cyan); }
     .menu { display: none; width: 38px; height: 36px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); cursor: pointer; font-size: 18px; }
-    .hero { min-height: calc(100vh - 65px); display: grid; grid-template-columns: minmax(300px, .78fr) minmax(480px, 1.22fr); align-items: center; gap: 56px; padding: 56px 0 70px; }
+    .hero { min-height: calc(100vh - 111px); position: relative; display: grid; grid-template-columns: minmax(300px, .78fr) minmax(480px, 1.22fr); align-items: center; gap: 56px; padding: 56px 0 70px; }
     .hero-copy { align-self: center; }
-    .signal { display: flex; align-items: center; gap: 9px; color: var(--cyan); font-size: 12px; }
+    .signal { display: flex; align-items: center; gap: 9px; color: var(--cyan); font-size: 12px; font-family: var(--mono); letter-spacing: .14em; }
     .signal::before { content: ""; width: 28px; height: 1px; background: currentColor; }
     h1 { margin: 18px 0 22px; font-size: 72px; line-height: 1.02; font-weight: 760; letter-spacing: 0; }
     .hero-copy > p { max-width: 430px; margin: 0; color: var(--muted); font-size: 16px; }
     .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
-    .hero-meta span { border: 1px solid var(--line); border-radius: 2px; padding: 6px 9px; color: #c8ced6; font-size: 11px; }
+    .hero-meta span { border: 1px solid var(--line); border-radius: 2px; padding: 6px 9px; color: #c8ced6; font-size: 11px; font-family: var(--mono); letter-spacing: .06em; }
     .carousel { min-width: 0; }
     .carousel-stage { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #030405; }
     .carousel-slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .32s ease; }
@@ -59,11 +77,11 @@
     .carousel-control:hover { border-color: var(--cyan); color: var(--cyan); }
     .carousel-control.prev { left: 14px; }
     .carousel-control.next { right: 14px; }
-    .carousel-nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
+    .carousel-nav { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px; }
     .carousel-nav button { min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 9px 10px; color: var(--muted); text-align: left; cursor: pointer; font-size: 11px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .carousel-nav button.active { color: var(--text); border-color: var(--cyan); background: var(--surface-2); }
-    .band { padding: 76px 0; border-top: 1px solid var(--line); scroll-margin-top: 64px; }
-    .band.alt { background: var(--surface); }
+    .band { padding: 92px 0; border-top: 1px solid var(--line); scroll-margin-top: 64px; }
+    .band.alt { background: rgba(16, 20, 26, .72); }
     .section-head { display: grid; grid-template-columns: minmax(200px, .7fr) minmax(360px, 1.3fr); gap: 50px; align-items: end; margin-bottom: 28px; }
     .section-head h2 { margin: 0; font-size: 34px; line-height: 1.15; }
     .section-head p { margin: 0; max-width: 640px; color: var(--muted); font-size: 14px; }
@@ -71,7 +89,7 @@
     .fact { min-width: 0; padding: 15px 17px; border-right: 1px solid var(--line); }
     .fact:last-child { border-right: 0; }
     .fact strong { display: block; color: var(--cyan); font-size: 21px; }
-    .fact span { color: var(--muted); font-size: 11px; }
+    .fact span { color: var(--muted); font-size: 11px; font-family: var(--mono); letter-spacing: .05em; }
     .portrait-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
     .landscape-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .work-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #0c0f13; }
@@ -82,7 +100,43 @@
     .work-copy { min-height: 86px; padding: 12px 13px 14px; border-top: 1px solid var(--line-soft); }
     .work-copy h3 { margin: 0 0 4px; font-size: 14px; }
     .work-copy p { margin: 0; color: var(--muted); font-size: 11px; }
-    .work-type { display: block; margin-bottom: 5px; color: var(--coral); font-size: 10px; }
+    .work-type { display: block; margin-bottom: 5px; color: var(--coral); font-size: 10px; font-family: var(--mono); letter-spacing: .12em; }
+    .kicker { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; color: color-mix(in oklab, var(--cyan) 78%, white 22%); font-family: var(--mono); font-size: 11px; letter-spacing: .22em; }
+    .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, color-mix(in oklab, var(--cyan) 30%, transparent), transparent); }
+    .ticker { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); padding: 13px 0; }
+    .ticker-track { display: flex; gap: 44px; width: max-content; animation: ticker 48s linear infinite; }
+    .ticker-group { display: flex; align-items: center; gap: 44px; }
+    .ticker-group span { font-family: var(--mono); font-size: 11px; letter-spacing: .24em; color: var(--muted); white-space: nowrap; }
+    .ticker-group em { font-style: normal; color: color-mix(in oklab, var(--cyan) 55%, transparent); }
+    @keyframes ticker { to { transform: translateX(-50%); } }
+    .feature { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; align-items: stretch; }
+    .feature .media { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: #000; }
+    .feature-copy { position: relative; padding: 18px 20px; border: 1px solid var(--line); border-radius: var(--radius); background: #0c0f13; }
+    .feature-copy::before, .feature-copy::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1px solid color-mix(in oklab, var(--cyan) 50%, transparent); }
+    .feature-copy::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+    .feature-copy::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+    .feature-copy h3 { margin: 0 0 10px; font-size: 22px; line-height: 1.25; }
+    .feature-copy > p { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+    .spec-list { margin: 0 0 14px; padding-left: 18px; color: var(--muted); font-size: 12px; }
+    .spec-list li { margin-bottom: 7px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+    .chips span { border: 1px solid color-mix(in oklab, var(--cyan) 26%, var(--line)); border-radius: 2px; padding: 4px 8px; color: #bfe9f6; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; background: color-mix(in oklab, var(--cyan) 7%, transparent); }
+    .iter { margin: 0 0 14px; padding: 0; list-style: none; }
+    .iter li { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 0 0 14px 0; }
+    .iter li::before { content: ""; position: absolute; left: 12px; top: 26px; bottom: 2px; width: 1px; background: var(--line); }
+    .iter li:last-child::before { display: none; }
+    .iter-tag { position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; width: 25px; height: 25px; border: 1px solid var(--line); border-radius: 50%; background: var(--surface-2); color: var(--muted); font-family: var(--mono); font-size: 9px; }
+    .iter li.now .iter-tag { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 12px rgba(67, 214, 247, .35); }
+    .iter p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+    .iter strong { display: block; color: var(--text); font-size: 12px; font-weight: 600; }
+    .feature-fs { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--surface); color: var(--text); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; cursor: pointer; transition: border-color .25s, color .25s, box-shadow .25s; }
+    .feature-fs:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 18px rgba(67, 214, 247, .18); }
+    /* ===== 下滑指示键：纯 CSS 实现，锚点跳转 #code ===== */
+    .scroll-down { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 9px; color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .26em; cursor: pointer; transition: color .25s; z-index: 5; }
+    .scroll-down::before { content: ""; width: 1px; height: 26px; background: linear-gradient(to bottom, transparent, currentColor); opacity: .7; }
+    .scroll-down:hover { color: var(--cyan); }
+    .scroll-down .chev { width: 9px; height: 9px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(45deg); animation: scrollHint 2.2s cubic-bezier(.4, 0, .2, 1) infinite; }
+    @keyframes scrollHint { 0%, 100% { transform: rotate(45deg) translate(0, 0); } 50% { transform: rotate(45deg) translate(4px, 4px); } }
     .tools { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .tool-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 96px; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: #0c0f13; }
     .tool-row h3 { margin: 0 0 3px; font-size: 16px; }
@@ -93,11 +147,16 @@
     .about p { margin: 0; max-width: 650px; color: var(--muted); }
     footer { padding: 26px 0 38px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
     .footer-row { display: flex; justify-content: space-between; gap: 20px; }
+    .footer-row a { color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: .14em; }
+    .footer-row a:hover { color: var(--cyan); }
+    .footer-row .f-mono { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; color: var(--muted); }
+    @media (max-width: 1040px) { .nav-shot { display: none; } .nav-links { gap: 18px; font-size: 12.5px; } }
     @media (max-width: 920px) {
       .hero { grid-template-columns: 1fr; min-height: auto; gap: 40px; padding: 56px 0; }
       h1 { font-size: 62px; }
       .hero-copy > p { max-width: 620px; }
       .portrait-grid { grid-template-columns: repeat(3, 1fr); }
+      .feature { grid-template-columns: 1fr; }
     }
     @media (max-width: 700px) {
       .wrap { width: min(100% - 28px, 620px); }
@@ -111,7 +170,7 @@
       h1 { font-size: 48px; }
       .hero-copy > p { font-size: 14px; }
       .carousel-control { width: 34px; height: 34px; }
-      .carousel-nav { grid-template-columns: repeat(2, 1fr); }
+      .carousel-nav { grid-template-columns: repeat(3, 1fr); }
       .band { padding: 54px 0; scroll-margin-top: 58px; }
       .section-head, .about { grid-template-columns: 1fr; gap: 12px; }
       .section-head h2, .about h2 { font-size: 28px; }
@@ -126,6 +185,15 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      .ticker-track { animation: none; }
+      .scroll-down .chev, .next-band .chev { animation: none; }
+    }
+    /* ===== 高级交互：原生滚动驱动动画（浏览器不支持时由 JS IntersectionObserver 兜底） ===== */
+    @media (prefers-reduced-motion: no-preference) {
+      @supports (animation-timeline: view()) {
+        .section-head, .facts, .about, .tool-row, .work-card, .feature-copy { animation: rvIn .8s cubic-bezier(.2, .6, .2, 1) both; animation-timeline: view(); animation-range: entry 0% entry 58%; }
+        .rv.pre { opacity: 1; }
+      }
     }
     .nav-shot { padding: 22px 0 19px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); font-size: 13px; cursor: pointer; }
     .nav-shot:hover { color: var(--text); border-bottom-color: var(--cyan); }
@@ -150,8 +218,17 @@
     }
     /* ===== 点缀：滚动进度条 ===== */
     .progress { position: fixed; top: 0; left: 0; z-index: 60; width: 0; height: 2px; background: linear-gradient(90deg, var(--cyan), #8fe7ff); box-shadow: 0 0 12px rgba(67, 214, 247, .55); }
-    /* ===== 点缀：背景微网格纹理 ===== */
-    body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(255, 255, 255, .022) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .022) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 74%); mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 74%); }
+    /* ===== 底纹：氛围光 + 微网格（对标 PostNew 的"黑是材质不是空洞"） ===== */
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(52% 38% at 50% -4%, rgba(67, 214, 247, .095), transparent 62%), radial-gradient(38% 30% at 88% 12%, rgba(143, 231, 255, .055), transparent 68%), radial-gradient(30% 26% at 6% 32%, rgba(67, 214, 247, .04), transparent 70%), linear-gradient(rgba(255, 255, 255, .024) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .024) 1px, transparent 1px); background-size: 100% 100%, 100% 100%, 100% 100%, 56px 56px, 56px 56px; }
+    /* ===== 底纹：全页胶片颗粒（暗角见 .fx-vignette，两者分层控制透明度） ===== */
+    body::after { content: ""; position: fixed; inset: 0; z-index: 80; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"); opacity: .07; }
+    .fx-vignette { position: fixed; inset: 0; z-index: 81; pointer-events: none; background: radial-gradient(130% 96% at 50% 42%, transparent 58%, rgba(0, 0, 0, .34) 100%); }
+    /* ===== 底纹：粒子链路画布（Obsidian 图谱式；内容之下、网格光之上） ===== */
+    .fx-particles { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
+    /* ===== 板块间下滑键（比 hero 的 .scroll-down 更醒目：药丸描边 + hover 发光） ===== */
+    .next-band { display: flex; align-items: center; gap: 12px; width: max-content; margin: 52px auto 0; padding: 10px 22px; border: 1px solid color-mix(in oklab, var(--cyan) 26%, var(--line)); border-radius: 999px; background: var(--surface); color: #b9c4cf; font-family: var(--mono); font-size: 10.5px; letter-spacing: .22em; cursor: pointer; transition: color .25s, border-color .25s, box-shadow .25s, transform .25s; }
+    .next-band:hover { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 20px rgba(67, 214, 247, .18); transform: translateY(-2px); }
+    .next-band .chev { width: 8px; height: 8px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(45deg); animation: scrollHint 2.2s cubic-bezier(.4, 0, .2, 1) infinite; }
     /* ===== 点缀：选中文字 ===== */
     ::selection { background: rgba(67, 214, 247, .28); color: #fff; }
     /* ===== 点缀：大标题与章节标题 ===== */
@@ -205,36 +282,84 @@
 </head>
 <body>
   <div class="progress" id="progress" aria-hidden="true"></div>
+  <div class="fx-vignette" aria-hidden="true"></div>
+  <canvas class="fx-particles" id="fx-particles" aria-hidden="true"></canvas>
   <header class="site-header">
     <div class="wrap nav">
       <a class="brand" href="#top"><span class="brand-mark"></span><span>金佳信 / 视频作品集</span><small>2026</small></a>
       <button class="menu" id="menu" type="button" aria-label="打开导航" aria-expanded="false">≡</button>
-      <nav class="nav-links" id="nav-links" aria-label="主导航"><a href="#commercial">千川素材</a><a href="#editing">AI短片与剪辑</a><a href="#tools">Agent项目</a><a href="#about">个人简介</a><button class="nav-shot" type="button" data-open-shot>分镜脚本</button></nav>
+      <nav class="nav-links" id="nav-links" aria-label="主导航"><a href="#code">程序化影像</a><a href="#aigc">AIGC短片</a><a href="#commercial">商业投放</a><a href="#editing">剪辑练习</a><a href="#tools">Agent项目</a><a href="#about">个人简介</a><button class="nav-shot" type="button" data-open-shot>分镜脚本</button></nav>
     </div>
   </header>
+  <!-- ===== TICKER：技能关键词横滚（首屏可见；纯装饰，aria-hidden；reduced-motion 时停用） ===== -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <div class="ticker-group"><span>REMOTION</span><em>·</em><span>REACT</span><em>·</em><span>TYPESCRIPT</span><em>·</em><span>程序化影像</span><em>·</em><span>AIGC</span><em>·</em><span>VIBE CODING</span><em>·</em><span>分镜脚本</span><em>·</em><span>千川投流</span><em>·</em><span>短视频剪辑</span><em>·</em><span>AI AGENT</span><em>·</em><span>内容运营</span><em>·</em><span>提示词工程</span><em>·</em></div>
+      <div class="ticker-group"><span>REMOTION</span><em>·</em><span>REACT</span><em>·</em><span>TYPESCRIPT</span><em>·</em><span>程序化影像</span><em>·</em><span>AIGC</span><em>·</em><span>VIBE CODING</span><em>·</em><span>分镜脚本</span><em>·</em><span>千川投流</span><em>·</em><span>短视频剪辑</span><em>·</em><span>AI AGENT</span><em>·</em><span>内容运营</span><em>·</em><span>提示词工程</span><em>·</em></div>
+    </div>
+  </div>
   <main id="top">
+    <!-- ===== HERO：左文案 + 右精选轮播（轮播首张=最强作品） ===== -->
     <section class="wrap hero" aria-labelledby="page-title">
       <div class="hero-copy">
-        <div class="signal">短视频 / AIGC / 内容运营</div>
+        <div class="signal">金佳信 JIN JIAXIN · 2027 届</div>
         <h1 id="page-title">视频作品集</h1>
-        <p>千川投流素材、AI短片与个人剪辑练习，记录内容制作和后期处理中的实践。</p>
-        <div class="hero-meta"><span>11条视频</span><span>内容制作</span><span>后期剪辑</span></div>
+        <p>用代码生成影像、用 AI 生成画面，也做商业投放素材。记录从内容制作走向 AI 应用与程序化创作的实践。</p>
+        <div class="hero-meta"><span>12条视频</span><span>REMOTION 程序化</span><span>AIGC 画面</span><span>千川投流</span></div>
       </div>
       <div class="carousel" id="featured-carousel" aria-label="精选作品轮播">
         <div class="carousel-stage">
-          <article class="carousel-slide active"><a href="#work-hou" aria-label="查看AI短片候"><img src="assets/creature.jpg" alt="AI短片候的画面" fetchpriority="high"><div class="slide-copy"><strong>AI短片《候》</strong><span>AI画面生成与后期剪辑</span></div></a></article>
+          <article class="carousel-slide active"><a href="#work-dragon" aria-label="查看中国龙V3"><img src="assets/dragon-v3.jpg" alt="中国龙V3的画面" fetchpriority="high"><div class="slide-copy"><strong>《中国龙》V3</strong><span>Remotion 程序化生成 · 120秒</span></div></a></article>
+          <article class="carousel-slide"><a href="#work-hou" aria-label="查看AI短片候"><img src="assets/creature.jpg" alt="AI短片候的画面" loading="lazy"><div class="slide-copy"><strong>AI短片《候》</strong><span>AI画面生成与后期剪辑</span></div></a></article>
           <article class="carousel-slide"><a href="#work-wukong" aria-label="查看AI短片悟空"><img src="assets/wukong.jpg" alt="AI短片悟空的画面" loading="lazy"><div class="slide-copy"><strong>AI短片《悟空》</strong><span>AI画面与节奏剪辑</span></div></a></article>
           <article class="carousel-slide"><a href="#work-water" aria-label="查看色彩变化水波纹"><img src="assets/edit-2.jpg" alt="色彩变化水波纹画面" loading="lazy"><div class="slide-copy"><strong>色彩变化水波纹</strong><span>色彩与遮罩练习</span></div></a></article>
           <article class="carousel-slide"><a href="#work-grid" aria-label="查看九宫快闪"><img src="assets/edit-4.jpg" alt="九宫快闪画面" loading="lazy"><div class="slide-copy"><strong>九宫快闪</strong><span>多画面节奏练习</span></div></a></article>
           <article class="carousel-slide"><a href="#work-drama" aria-label="查看情侣小短剧"><img src="assets/edit-5.jpg" alt="情侣小短剧画面" loading="lazy"><div class="slide-copy"><strong>情侣小短剧</strong><span>对白与画面衔接</span></div></a></article>
           <button class="carousel-control prev" type="button" aria-label="上一张">‹</button><button class="carousel-control next" type="button" aria-label="下一张">›</button>
         </div>
-        <div class="carousel-nav" aria-label="选择精选作品"><button class="active" type="button">《候》</button><button type="button">《悟空》</button><button type="button">水波纹</button><button type="button">九宫快闪</button><button type="button">情侣短剧</button></div>
+        <div class="carousel-nav" aria-label="选择精选作品"><button class="active" type="button">《中国龙》</button><button type="button">《候》</button><button type="button">《悟空》</button><button type="button">水波纹</button><button type="button">九宫快闪</button><button type="button">情侣短剧</button></div>
+      </div>
+      <a class="scroll-down" href="#code" aria-label="下滑查看作品">SCROLL<span class="chev"></span></a>
+    </section>
+    <section class="band alt" id="code" aria-labelledby="code-title">
+      <div class="wrap">
+        <div class="section-head"><div class="head-left"><div class="kicker">01 · PROCEDURAL FILM</div><h2 id="code-title">程序化影像</h2></div><p>不依赖剪辑软件的时间轴，用 React 代码描述画面、镜头与时间轴，由 Remotion 逐帧渲染成片。这是我从内容制作走向 AI 应用与工程实践的主要尝试。</p></div>
+        <div class="facts" aria-label="中国龙V3制作信息"><div class="fact"><strong>120秒</strong><span>成片时长</span></div><div class="fact"><strong>2K</strong><span>母版 2560×1440</span></div><div class="fact"><strong>3次</strong><span>V1→V3 完整迭代</span></div><div class="fact"><strong>0</strong><span>配音轨，仅程序化拟音</span></div></div>
+        <div class="feature" id="work-dragon">
+          <div class="media landscape"><video controls preload="none" poster="assets/dragon-v3.jpg" playsinline title="双击可全屏" aria-label="《中国龙》V3 成片，120 秒，Remotion 程序化生成"><source src="assets/dragon-v3.mp4" type="video/mp4"></video></div>
+          <div class="feature-copy">
+            <span class="work-type">程序化影像 · VIBE CODING</span>
+            <h3>《中国龙》V3</h3>
+            <p>我的第一条全流程 vibe coding 影像作品：由 AI 编程助手 Codex（GPT-6.1 Astra）以代码构建画面、动效与时间轴，本人负责选题、知识脚本与旁白底稿、审片和迭代决策，历经三次完整重制。成片以中国龙为文化形象，观察它如何连接自然经验、器物、礼制与共同想象。</p>
+            <div class="chips" aria-label="技术栈"><span>REACT</span><span>TYPESCRIPT</span><span>REMOTION</span><span>程序化拟音</span><span>CODEX</span></div>
+            <ul class="iter" aria-label="迭代历程">
+              <li><span class="iter-tag">V1</span><div><strong>方向验证</strong><p>26 秒竖屏 Demo，验证龙形与节奏方向</p></div></li>
+              <li><span class="iter-tag">V2</span><div><strong>结构重制</strong><p>扩至 120 秒横屏，加入原创程序化拟音</p></div></li>
+              <li class="now"><span class="iter-tag">V3</span><div><strong>最终版</strong><p>龙形、美术与镜头运动全面迭代，2K 母版交付</p></div></li>
+            </ul>
+            <ul class="spec-list">
+              <li>母版 2560×1440 / 30fps / 120 秒；本页为 1080p 压缩版</li>
+              <li>无配音轨，声音只用纸卷、墨、水、空气、玉石与青铜联想的设计性拟音，便于后期自行录制旁白</li>
+            </ul>
+            <button class="feature-fs" type="button" id="dragon-fs" title="双击画面也可全屏">⛶ 全屏观看</button>
+          </div>
+        </div>
+        <a class="next-band" href="#aigc" aria-label="下滑至 AIGC 短片"><span>NEXT · AIGC 短片</span><span class="chev"></span></a>
+      </div>
+    </section>
+    <section class="band" id="aigc" aria-labelledby="aigc-title">
+      <div class="wrap">
+        <div class="section-head"><div class="head-left"><div class="kicker">02 · AIGC SHORTS</div><h2 id="aigc-title">AIGC 短片</h2></div><p>AI 生成画面与后期剪辑结合的短片，《候》附带可查看的分镜脚本。</p></div>
+        <div class="landscape-grid">
+          <article class="work-card" id="work-hou"><div class="media landscape"><video controls preload="none" poster="assets/creature.jpg" playsinline><source src="assets/hou-trailer.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">AI短片</span><h3>《候》</h3><p>AI画面生成与后期剪辑作品，1920×1080。</p><a class="shot-inline" href="#" data-open-shot>查看分镜脚本 →</a></div></article>
+          <article class="work-card" id="work-wukong"><div class="media landscape"><video controls preload="none" poster="assets/wukong.jpg" playsinline><source src="assets/wukong.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">AI短片</span><h3>《悟空》</h3><p>AI画面与节奏剪辑练习，1280×720网页版本。</p></div></article>
+        </div>
+        <a class="next-band" href="#commercial" aria-label="下滑至千川投流素材"><span>NEXT · 千川投流素材</span><span class="chev"></span></a>
       </div>
     </section>
     <section class="band alt" id="commercial" aria-labelledby="commercial-title">
       <div class="wrap">
-        <div class="section-head"><h2 id="commercial-title">千川投流素材</h2><p>实习期间参与制作的抖音千川竖屏素材，内容包括产品露出、情景对白、卖点字幕和场景化表达。</p></div>
+        <div class="section-head"><div class="head-left"><div class="kicker">03 · COMMERCIAL</div><h2 id="commercial-title">千川投流素材</h2></div><p>实习期间参与制作的抖音千川竖屏素材，内容包括产品露出、情景对白、卖点字幕和场景化表达。</p></div>
         <div class="facts" aria-label="千川素材数据"><div class="fact"><strong>¥5万</strong><span>最高单日素材消耗</span></div><div class="fact"><strong>15条</strong><span>日产精剪素材</span></div><div class="fact"><strong>70%→80%</strong><span>过审率变化</span></div><div class="fact"><strong>5条</strong><span>页面展示素材</span></div></div>
         <div class="portrait-grid">
           <article class="work-card"><div class="media portrait"><video controls preload="none" poster="assets/qianchuan-1.jpg" playsinline><source src="assets/qianchuan-1.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">千川素材</span><h3>产品特写钩子</h3><p>产品露出与卖点字幕。</p></div></article>
@@ -243,28 +368,29 @@
           <article class="work-card"><div class="media portrait"><video controls preload="none" poster="assets/qianchuan-4.jpg" playsinline><source src="assets/qianchuan-4.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">千川素材</span><h3>生活场景切入</h3><p>场景痛点与产品承接。</p></div></article>
           <article class="work-card"><div class="media portrait"><video controls preload="none" poster="assets/qianchuan-5.jpg" playsinline><source src="assets/qianchuan-5.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">千川素材</span><h3>问答式推进</h3><p>对白节奏与信息推进。</p></div></article>
         </div>
+        <a class="next-band" href="#editing" aria-label="下滑至剪辑练习"><span>NEXT · 剪辑练习</span><span class="chev"></span></a>
       </div>
     </section>
     <section class="band" id="editing" aria-labelledby="editing-title">
       <div class="wrap">
-        <div class="section-head"><h2 id="editing-title">AI短片与剪辑</h2><p>包含AI画面生成、蒙版转场、多画面快切和短剧对白节奏练习。</p></div>
+        <div class="section-head"><div class="head-left"><div class="kicker">04 · EDITING</div><h2 id="editing-title">剪辑练习</h2></div><p>蒙版转场、多画面快切和短剧对白节奏的手上功夫练习，均为 1280×720 网页版本。</p></div>
         <div class="landscape-grid">
-          <article class="work-card" id="work-hou"><div class="media landscape"><video controls preload="none" poster="assets/creature.jpg" playsinline><source src="assets/hou-trailer.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">AI短片</span><h3>《候》</h3><p>AI画面生成与后期剪辑作品，1920×1080。</p><a class="shot-inline" href="#" data-open-shot>查看分镜脚本 →</a></div></article>
-          <article class="work-card" id="work-wukong"><div class="media landscape"><video controls preload="none" poster="assets/wukong.jpg" playsinline><source src="assets/wukong.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">AI短片</span><h3>《悟空》</h3><p>AI画面与节奏剪辑练习，1280×720网页版本。</p></div></article>
           <article class="work-card" id="work-water"><div class="media landscape"><video controls preload="none" poster="assets/edit-2.jpg" playsinline><source src="assets/edit-2.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">剪辑练习</span><h3>色彩变化水波纹</h3><p>色彩变化与水波纹效果，1280×720网页版本。</p></div></article>
           <article class="work-card"><div class="media landscape"><video controls preload="none" poster="assets/edit-3.jpg" playsinline><source src="assets/edit-3.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">剪辑练习</span><h3>城市 · 圆形揭示</h3><p>蒙版转场与城市画面，1280×720网页版本。</p></div></article>
           <article class="work-card" id="work-grid"><div class="media landscape"><video controls preload="none" poster="assets/edit-4.jpg" playsinline><source src="assets/edit-4.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">剪辑练习</span><h3>九宫快闪</h3><p>九宫格画面与快切节奏，1280×720网页版本。</p></div></article>
           <article class="work-card" id="work-drama"><div class="media landscape"><video controls preload="none" poster="assets/edit-5.jpg" playsinline><source src="assets/edit-5.mp4" type="video/mp4"></video></div><div class="work-copy"><span class="work-type">剪辑练习</span><h3>情侣小短剧</h3><p>对白节奏和画面衔接练习，1280×720网页版本。</p></div></article>
         </div>
+        <a class="next-band" href="#tools" aria-label="下滑至 Agent 项目"><span>NEXT · AGENT 项目</span><span class="chev"></span></a>
       </div>
     </section>
     <section class="band alt" id="tools" aria-labelledby="tools-title">
-      <div class="wrap"><div class="section-head"><h2 id="tools-title">Agent项目</h2><p>个人制作的电商短视频脚本工具，包含脚本模板、广告法合规内容和基础测试文件。</p></div><div class="tools"><div class="tool-row"><div><h3>电商脚本 Agent</h3><p>查看工具界面与项目说明</p></div><a href="https://jin2004-cmd.github.io/ecom-script-agent/" target="_blank" rel="noreferrer">在线体验</a></div><div class="tool-row"><div><h3>GitHub 仓库</h3><p>查看公开项目与代码</p></div><a href="https://github.com/jin2004-cmd" target="_blank" rel="noreferrer">打开 GitHub</a></div></div></div>
+      <div class="wrap"><div class="section-head"><div class="head-left"><div class="kicker">05 · AI AGENTS</div><h2 id="tools-title">Agent 项目</h2></div><p>个人用 AI 辅助开发的小工具。需求、边界与验收由本人提出，代码以 AI 辅助生成为主，目前仍在补齐独立排错与测试覆盖。</p></div><div class="tools"><div class="tool-row"><div><h3>电商脚本 Agent</h3><p>脚本模板、广告法合规与基础测试</p></div><a href="https://jin2004-cmd.github.io/ecom-script-agent/" target="_blank" rel="noreferrer">在线体验</a></div><div class="tool-row"><div><h3>OfferAgent 秋招求职引擎</h3><p>个人求职流程管理工具</p></div><a href="offer-agent/index.html" target="_blank" rel="noreferrer">打开页面</a></div><div class="tool-row"><div><h3>GitHub 仓库</h3><p>查看公开项目与代码</p></div><a href="https://github.com/jin2004-cmd" target="_blank" rel="noreferrer">打开 GitHub</a></div></div><a class="next-band" href="#about" aria-label="下滑至个人简介"><span>NEXT · 个人简介</span><span class="chev"></span></a></div>
     </section>
-    <section class="band" id="about" aria-labelledby="about-title"><div class="wrap about"><h2 id="about-title">个人简介</h2><p>教育技术学专业学生，主要关注AI视频制作、短视频剪辑和内容运营。作品集持续记录个人练习和项目。</p></div></section>
+    <section class="band" id="about" aria-labelledby="about-title"><div class="wrap about"><div class="head-left"><div class="kicker">06 · ABOUT</div><h2 id="about-title">个人简介</h2></div><p>教育技术学专业学生，2027 届。已能稳定交付 AIGC 影像、程序化视频、选题脚本与人工选片质检；正在从内容 / AIGC 走向 AI 应用与智能体开发，代码以 AI 辅助生成为主，需求、边界与验收由本人提出，独立排错与工程能力仍在补齐。作品集持续记录个人练习和项目。</p></div></section>
   </main>
-  <footer><div class="wrap footer-row"><span>金佳信 · 视频作品集</span><span>HTML / CSS / JavaScript</span></div></footer>
+  <footer><div class="wrap footer-row"><span>金佳信 · 视频作品集 · 2026</span><a href="https://github.com/jin2004-cmd" target="_blank" rel="noreferrer">GITHUB ↗</a><span class="f-mono">BUILT WITH HTML · CSS · JS — VIBE CODING × AI</span></div></footer>
   <script>
+    /* ===== 基础交互：移动端菜单 / 轮播 / 视频互斥播放 / 导航高亮 ===== */
     const menu = document.getElementById("menu");
     const nav = document.getElementById("nav-links");
     menu.addEventListener("click", () => { const open = nav.classList.toggle("open"); menu.setAttribute("aria-expanded", String(open)); });
@@ -300,6 +426,7 @@
     </div>
   </div>
   <script>
+    /* ===== 《候》分镜脚本弹窗 ===== */
     const shotModal = document.getElementById("shot-modal");
     function openShot() { shotModal.classList.add("open"); document.body.classList.add("shot-locked"); }
     function closeShot() { shotModal.classList.remove("open"); document.body.classList.remove("shot-locked"); }
@@ -308,6 +435,113 @@
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && shotModal.classList.contains("open")) closeShot(); });
   </script>
   <script>
+    /* ===== 龙片全屏观看（按钮 + 双击；iOS Safari 走 webkitEnterFullscreen） ===== */
+    (function () {
+      const btn = document.getElementById("dragon-fs");
+      const video = document.querySelector("#work-dragon video");
+      if (!btn || !video) return;
+      const goFullscreen = () => {
+        if (video.requestFullscreen) video.requestFullscreen().catch(() => {});
+        else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+      };
+      btn.addEventListener("click", goFullscreen);
+      video.addEventListener("dblclick", goFullscreen);
+    })();
+  </script>
+  <script>
+    /* ===== 底纹粒子链路：Obsidian 图谱式浮动网络（DPR 感知；tab 隐藏暂停；reduced-motion 只画一帧静态） ===== */
+    (function () {
+      const canvas = document.getElementById("fx-particles");
+      if (!canvas || !canvas.getContext) return;
+      const ctx = canvas.getContext("2d");
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const DPR = Math.min(2, window.devicePixelRatio || 1);
+      const LINK = 132;
+      let w = 0, h = 0, pts = [], raf = 0, running = false, resizeTimer = 0;
+
+      function size() {
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = Math.round(w * DPR);
+        canvas.height = Math.round(h * DPR);
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        const n = Math.max(28, Math.min(60, Math.round(w * h / 24000)));
+        pts = [];
+        for (let i = 0; i < n; i++) pts.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .64, vy: (Math.random() - .5) * .64 });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < pts.length; i++) {
+          const p = pts[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < -14) p.x = w + 14; else if (p.x > w + 14) p.x = -14;
+          if (p.y < -14) p.y = h + 14; else if (p.y > h + 14) p.y = -14;
+        }
+        for (let i = 0; i < pts.length; i++) {
+          for (let j = i + 1; j < pts.length; j++) {
+            const a = pts[i], b = pts[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < LINK * LINK) {
+              ctx.strokeStyle = "rgba(143, 231, 255, " + ((1 - Math.sqrt(d2) / LINK) * .16).toFixed(3) + ")";
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          }
+        }
+        ctx.fillStyle = "rgba(143, 231, 255, .34)";
+        for (let i = 0; i < pts.length; i++) {
+          const p = pts[i];
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 1.3, 0, 6.2832);
+          ctx.fill();
+        }
+      }
+
+      function step() {
+        draw();
+        if (running) raf = requestAnimationFrame(step);
+      }
+
+      function start() {
+        if (reduce || running) return;
+        running = true;
+        raf = requestAnimationFrame(step);
+      }
+
+      function stop() {
+        running = false;
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0;
+      }
+
+      size();
+      draw();
+      if (!reduce) start();
+
+      window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          const was = running;
+          stop();
+          size();
+          draw();
+          if (was) start();
+        }, 160);
+      });
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) stop();
+        else start();
+      });
+    })();
+  </script>
+  <script>
+    /* ===== 滚动进度条 + 进场动画（浏览器支持 scroll-driven CSS 则跳过 JS 方案）+ 数字滚动 ===== */
     (function () {
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const progress = document.getElementById("progress");
@@ -320,6 +554,7 @@
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
       if (reduce) return;
+      if (window.CSS && CSS.supports && CSS.supports("animation-timeline: view()")) return;
       const rvTargets = [...document.querySelectorAll(".section-head, .facts, .about, .tool-row, .work-card")];
       document.querySelectorAll(".portrait-grid, .landscape-grid, .tools").forEach((grid) => {
         [...grid.children].forEach((child, i) => child.style.setProperty("--rv-delay", (i * 70) + "ms"));
